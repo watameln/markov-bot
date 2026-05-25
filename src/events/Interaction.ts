@@ -1,7 +1,5 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder, ChatInputCommandInteraction, ButtonInteraction } from "discord.js";
 import Event from "../structures/Event";
-
-import { CommandInteraction, ButtonInteraction } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 import CommandInterface from "../interfaces/CommandInterface";
 
@@ -27,7 +25,7 @@ export default class Interaction extends Event {
         super("interactionCreate");
     }
 
-    async run(client: ClientInterface, interaction: CommandInteraction | ButtonInteraction): Promise<void> {
+    async run(client: ClientInterface, interaction: ChatInputCommandInteraction | ButtonInteraction): Promise<void> {
         const lng = { lng: interaction.locale };
         const { t } = client.i18n;
 
@@ -60,29 +58,24 @@ export default class Interaction extends Event {
                 }
             }
         } else if (interaction.isButton()) {
-            let embed: MessageEmbed;
+            let embed: EmbedBuilder;
             if (interaction.customId == "donate") {
-                embed = new MessageEmbed({
-                    color: 0x34eb71,
-                    title: "💸 " + t("commands.donate.title", { ...lng }),
-                    description: t("commands.donate.description", {
+                embed = new EmbedBuilder()
+                    .setColor(0x34eb71)
+                    .setTitle("💸 " + t("commands.donate.title", { ...lng }))
+                    .setDescription(t("commands.donate.description", {
                         ...lng,
                         urls: `${client.config.emojis.bmc} **Buy Me A Coffee: [buymeacoffee.com/knownasbot](${client.config.links.bmc})**`,
                         friendURL: `**${client.config.emojis.twitter} [@LukeFl_](https://twitter.com/lukefl_)**`
-                    }),
-                    fields: [
+                    }))
+                    .addFields([
                         {
                             name: t("commands.donate.cryptoTitle", { ...lng }),
                             value: `**${client.config.emojis.bitcoin} Bitcoin:** \`${client.config.cryptoAddresses.bitcoin}\`\n**${client.config.emojis.ethereum} Ethereum:** \`${client.config.cryptoAddresses.ethereum}\``
                         }
-                    ],
-                    image: {
-                        url: this.pleadingGIFs[Math.floor(Math.random() * this.pleadingGIFs.length)]
-                    },
-                    footer: {
-                        text: t("commands.donate.footer", lng)
-                    }
-                });
+                    ])
+                    .setImage(this.pleadingGIFs[Math.floor(Math.random() * this.pleadingGIFs.length)])
+                    .setFooter({ text: t("commands.donate.footer", lng) });
             } else if (interaction.customId == "faq") {
                 const commands = await client.application.commands.fetch();
 
@@ -103,11 +96,10 @@ export default class Interaction extends Event {
                     parameter: t("commands.deleteTexts.command.options.0.name", lng)
                 });
 
-                embed = new MessageEmbed({
-                    title: "❔ " + translation.title,
-                    description: translation.description,
-                    fields: translation.fields
-                });
+                embed = new EmbedBuilder()
+                    .setTitle("❔ " + translation.title)
+                    .setDescription(translation.description)
+                    .addFields(translation.fields);
             }
 
             if (embed) {

@@ -1,6 +1,6 @@
 import SubCommand from "../../../structures/SubCommand";
 
-import { CommandInteraction } from "discord.js/typings";
+import { ChatInputCommandInteraction, ApplicationCommandOptionType, ChannelType } from "discord.js";
 import ClientInterface from "../../../interfaces/ClientInterface";
 
 export default class ChannelSubCommand extends SubCommand {
@@ -11,17 +11,17 @@ export default class ChannelSubCommand extends SubCommand {
             "commands.channel.command.description",
             [
                 {
-                    type: "CHANNEL",
+                    type: ApplicationCommandOptionType.Channel,
                     name: "commands.channel.command.options.0.name",
                     description: "commands.channel.command.options.0.description",
-                    channelTypes: [ "GUILD_TEXT", "GUILD_PUBLIC_THREAD", "GUILD_PRIVATE_THREAD" ],
+                    channelTypes: [ ChannelType.GuildText, ChannelType.GuildPublicThread, ChannelType.GuildPrivateThread ],
                     required: true
                 }
             ]
         );
     }
 
-    async run(interaction: CommandInteraction) {
+    async run(interaction: ChatInputCommandInteraction) {
         const lng = { lng: interaction.locale };
         const channel = interaction.options.getChannel(this.options[0].name);
         const database = await this.client.database.fetch(interaction.guildId);

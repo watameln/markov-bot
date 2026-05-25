@@ -297,7 +297,7 @@
                 },
                 {
                     "name": "Como o bot foi feito?",
-                    "value": "O bot foi desenvolvido em [TypeScript](https://www.typescriptlang.org) (uma melhoria do JavaScript), usando [Discord.js](https://discord.js.org) no [Node.js](https://nodejs.org/en/about). Inicialmente o banco de dados era um arquivo [JSON](https://pt.wikipedia.org/wiki/JSON), mas logo passou a ser utilizado [MongoDB](https://pt.wikipedia.org/wiki/MongoDB). Atualmente hospedado na host de um [amigo]({{friendURL}}) na [DigitalOcean](https://digitalocean.com/)."
+                    "value": "O bot foi desenvolvido em [TypeScript](https://pt.wikipedia.org/wiki/TypeScript) (uma melhoria do JavaScript), usando [Discord.js](https://discord.js.org) no [Node.js](https://nodejs.org/en/about). Ele armazena dados localmente em JSON e pode ser hospedado em qualquer dispositivo. Atualmente hospedado na host de um [amigo]({{friendURL}}) na [DigitalOcean](https://digitalocean.com/)."
                 },
                 {
                     "name": "Pretende escalonar o bot?",

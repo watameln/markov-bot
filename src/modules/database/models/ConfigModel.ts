@@ -1,27 +1,8 @@
-import { Schema, model } from "mongoose";
+import FileDatabase from "../FileDatabase";
 
-interface ConfigModel {
-    enabled: boolean;
-    channelId: string;
-    guildId: string;
-    webhook: string;
-    textsLimit: number;
-
-    collectPercentage: number;
-    sendingPercentage: number;
-    replyPercentage: number;
+export default {
+    findOne: (query: any, projection?: string | string[]) => FileDatabase.findOne("configs", query, projection),
+    findOneAndUpdate: (query: any, update: any, options: any) => FileDatabase.findOneAndUpdate("configs", query, update, options),
+    updateOne: (query: any, update: any, options?: any) => FileDatabase.updateOne("configs", query, update, options),
+    deleteOne: (query: any) => FileDatabase.deleteOne("configs", query),
 };
-
-const schema = new Schema<ConfigModel>({
-    enabled: { type: Boolean, default: true },
-    channelId: String,
-    guildId: String,
-    webhook: String,
-    textsLimit: { type: Number, default: 500 },
-
-    collectPercentage: { type: Number, default: 0.35 },
-    sendingPercentage: { type: Number, default: 0.10 },
-    replyPercentage: { type: Number, default: 0.25 }
-});
-
-export default model("configs", schema);

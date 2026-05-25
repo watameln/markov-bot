@@ -1,8 +1,6 @@
 import axios from "axios";
-import { MessageEmbed, MessageActionRow, MessageButton, version } from "discord.js";
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, version, ChatInputCommandInteraction, TextChannel, PermissionsBitField } from "discord.js";
 import Command from "../structures/Command";
-
-import { CommandInteraction, TextChannel } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 
 export default class InfoCommand extends Command {
@@ -16,7 +14,7 @@ export default class InfoCommand extends Command {
         );
     }
 
-    async run(interaction: CommandInteraction) {
+    async run(interaction: ChatInputCommandInteraction) {
         await interaction.deferReply();
 
         const lng = { lng: interaction.locale };
@@ -36,7 +34,7 @@ export default class InfoCommand extends Command {
             state: isTracking ? this.t("vars.enabled", lng) : this.t("vars.disabled", lng)
         });
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle("👽 " + this.t("commands.info.texts.title", lng))
             .setColor(Math.floor(Math.random() * 0xFFFFFF))
             .setDescription(description);
@@ -80,8 +78,8 @@ export default class InfoCommand extends Command {
         const clientMember = channel && await interaction.guild.members.fetchMe();
         const messagePermission = (
             channel &&
-            clientMember.permissionsIn(channel)?.has("SEND_MESSAGES") &&
-            clientMember.permissionsIn(channel)?.has("VIEW_CHANNEL")
+            clientMember.permissionsIn(channel)?.has(PermissionsBitField.Flags.SendMessages) &&
+            clientMember.permissionsIn(channel)?.has(PermissionsBitField.Flags.ViewChannel)
         );
 
         let serverInfo;
@@ -125,60 +123,52 @@ export default class InfoCommand extends Command {
             }
         );
 
-        const cRow = new MessageActionRow()
+        const cRow = new ActionRowBuilder<ButtonBuilder>()
             .addComponents(
-                new MessageButton({
-                    emoji: this.client.config.emojis.topgg,
-                    label: "Top.gg",
-                    url: this.client.config.links.topgg,
-                    style: "LINK"
-                }),
-                new MessageButton({
-                    customId: "donate",
-                    emoji: "🤑",
-                    label: this.t("commands.info.texts.donate", lng),
-                    style: "SECONDARY"
-                }),
-                new MessageButton({
-                    customId: "faq",
-                    emoji: "🤔",
-                    label: this.t("commands.info.texts.faq", lng),
-                    style: "SECONDARY"
-                }),
-                new MessageButton({
-                    emoji: "😺",
-                    label: this.t("commands.info.texts.cutecats", lng),
-                    url: "https://youtu.be/dQw4w9WgXcQ",
-                    style: "LINK"
-                })
+                new ButtonBuilder()
+                    .setEmoji(this.client.config.emojis.topgg)
+                    .setLabel("Top.gg")
+                    .setURL(this.client.config.links.topgg)
+                    .setStyle(ButtonStyle.Link),
+                new ButtonBuilder()
+                    .setCustomId("donate")
+                    .setEmoji("🤑")
+                    .setLabel(this.t("commands.info.texts.donate", lng))
+                    .setStyle(ButtonStyle.Secondary),
+                new ButtonBuilder()
+                    .setCustomId("faq")
+                    .setEmoji("🤔")
+                    .setLabel(this.t("commands.info.texts.faq", lng))
+                    .setStyle(ButtonStyle.Secondary),
+                new ButtonBuilder()
+                    .setEmoji("😺")
+                    .setLabel(this.t("commands.info.texts.cutecats", lng))
+                    .setURL("https://youtu.be/dQw4w9WgXcQ")
+                    .setStyle(ButtonStyle.Link)
             );
 
-        const docsRow = new MessageActionRow()
+        const docsRow = new ActionRowBuilder<ButtonBuilder>()
             .addComponents(
-                new MessageButton({
-                    emoji: "👥",
-                    label: this.t("vars.support", lng),
-                    url: this.client.config.links.support,
-                    style: "LINK"
-                }),
-                new MessageButton({
-                    emoji: this.client.config.emojis.github,
-                    label: "GitHub",
-                    url: this.client.config.links.github,
-                    style: "LINK"
-                }),
-                new MessageButton({
-                    emoji: "📜",
-                    label: this.t("vars.tos", lng),
-                    url: this.client.config.links.tos,
-                    style: "LINK"
-                }),
-                new MessageButton({
-                    emoji: "🔒",
-                    label: this.t("vars.privacyPolicy", lng),
-                    url: this.client.config.links.privacy,
-                    style: "LINK"
-                })
+                new ButtonBuilder()
+                    .setEmoji("👥")
+                    .setLabel(this.t("vars.support", lng))
+                    .setURL(this.client.config.links.support)
+                    .setStyle(ButtonStyle.Link),
+                new ButtonBuilder()
+                    .setEmoji(this.client.config.emojis.github)
+                    .setLabel("GitHub")
+                    .setURL(this.client.config.links.github)
+                    .setStyle(ButtonStyle.Link),
+                new ButtonBuilder()
+                    .setEmoji("📜")
+                    .setLabel(this.t("vars.tos", lng))
+                    .setURL(this.client.config.links.tos)
+                    .setStyle(ButtonStyle.Link),
+                new ButtonBuilder()
+                    .setEmoji("🔒")
+                    .setLabel(this.t("vars.privacyPolicy", lng))
+                    .setURL(this.client.config.links.privacy)
+                    .setStyle(ButtonStyle.Link)
             );
 
         embed.setFooter({

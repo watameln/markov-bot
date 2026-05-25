@@ -1,6 +1,6 @@
 import Command from "../structures/Command";
 
-import { CommandInteraction, PermissionResolvable } from "discord.js/typings";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction, PermissionResolvable } from "discord.js";
 import ClientInterface from "../interfaces/ClientInterface";
 
 export default class BanCommand extends Command {
@@ -15,13 +15,13 @@ export default class BanCommand extends Command {
             "commands.ban.command.description",
             [
                 {
-                    type: "STRING",
+                    type: ApplicationCommandOptionType.String,
                     name: "commands.ban.command.options.0.name",
                     description: "commands.ban.command.options.0.description",
                     required: true
                 },
                 {
-                    type: "STRING",
+                    type: ApplicationCommandOptionType.String,
                     name: "commands.ban.command.options.1.name",
                     description: "commands.ban.command.options.1.description",
                     required: true
@@ -30,7 +30,7 @@ export default class BanCommand extends Command {
         );
     }
 
-    async run(interaction: CommandInteraction) {
+    async run(interaction: ChatInputCommandInteraction) {
         const guild = interaction.options.getString(this.options[0].name);
         const reason = interaction.options.getString(this.options[1].name);
 

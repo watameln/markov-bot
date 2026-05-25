@@ -1,7 +1,5 @@
-import { MessageEmbed, MessageActionRow, MessageButton, WebhookClient } from "discord.js";
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, WebhookClient, Guild } from "discord.js";
 import Event from "../structures/Event";
-
-import { Guild } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 
 export default class GuildCreate extends Event {
@@ -32,26 +30,23 @@ export default class GuildCreate extends Event {
             const deleteCommand = commands.find((v) => v.name == deleteCommandName);
 
             try {
-                const row = new MessageActionRow()
+                const row = new ActionRowBuilder<ButtonBuilder>()
                     .addComponents(
-                        new MessageButton({
-                            emoji: "💡",
-                            label: t("vars.gettingStarted", lng),
-                            url: client.config.links.website,
-                            style: "LINK"
-                        }),
-                        new MessageButton({
-                            emoji: "📜",
-                            label: t("vars.tos", lng),
-                            url: client.config.links.tos,
-                            style: "LINK"
-                        }),
-                        new MessageButton({
-                            emoji: "🔒",
-                            label: t("vars.privacyPolicy", lng),
-                            url: client.config.links.privacy,
-                            style: "LINK"
-                        })
+                        new ButtonBuilder()
+                            .setEmoji("💡")
+                            .setLabel(t("vars.gettingStarted", lng))
+                            .setURL(client.config.links.website)
+                            .setStyle(ButtonStyle.Link),
+                        new ButtonBuilder()
+                            .setEmoji("📜")
+                            .setLabel(t("vars.tos", lng))
+                            .setURL(client.config.links.tos)
+                            .setStyle(ButtonStyle.Link),
+                        new ButtonBuilder()
+                            .setEmoji("🔒")
+                            .setLabel(t("vars.privacyPolicy", lng))
+                            .setURL(client.config.links.privacy)
+                            .setStyle(ButtonStyle.Link)
                     );
 
                 await guild.systemChannel.send({
@@ -78,7 +73,7 @@ export default class GuildCreate extends Event {
             description    += `Owner: \`${ownerTag ?? "Unknown"}\` (\`${guild?.ownerId ?? "Unknown"}\`).\n`;
             description    += `Member count: \`${guild?.memberCount ?? "Unknown"}\`.\n`;
 
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle(guild?.name ?? "Unknown")
                 .setColor(0x32d35b)
                 .setDescription(description)

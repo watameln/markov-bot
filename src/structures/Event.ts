@@ -1,4 +1,4 @@
-import { WSEventType } from "discord.js/typings";
+import { WSEventType } from "discord.js";
 import ClientInterface from "../interfaces/ClientInterface";
 
 export default class Event {

@@ -1,15 +1,8 @@
-import { Schema, model } from "mongoose";
+import FileDatabase from "../FileDatabase";
 
-interface TextsModel {
-    guildId: string;
-    list: string[];
-    expiresAt: { type: Date, default: number, expires: Date }
+export default {
+    findOne: (query: any) => FileDatabase.findOne("texts", query),
+    updateOne: (query: any, update: any, options?: any) => FileDatabase.updateOne("texts", query, update, options),
+    deleteOne: (query: any) => FileDatabase.deleteOne("texts", query),
+    deleteMany: (query: any) => FileDatabase.deleteMany("texts", query),
 };
-
-const schema = new Schema<TextsModel>({
-    guildId: String,
-    list: { type: [ String ], default: [] },
-    expiresAt: { type: Date, default: Date.now() + (30 * 1000 * 60 * 60 * 24) }
-});
-
-export default model("texts", schema);

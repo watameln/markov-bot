@@ -1,6 +1,6 @@
 import SubCommand from "../../../structures/SubCommand";
 
-import { CommandInteraction } from "discord.js/typings";
+import { ChatInputCommandInteraction } from "discord.js";
 import ClientInterface from "../../../interfaces/ClientInterface";
 
 export default class EnableSubCommand extends SubCommand {
@@ -12,7 +12,7 @@ export default class EnableSubCommand extends SubCommand {
         );
     }
 
-    async run(interaction: CommandInteraction) {
+    async run(interaction: ChatInputCommandInteraction) {
         const lng = { lng: interaction.locale };
         const database = await this.client.database.fetch(interaction.guildId);
 

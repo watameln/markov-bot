@@ -1,4 +1,4 @@
-import { CommandInteraction, ApplicationCommandOptionData, PermissionResolvable } from "discord.js/typings";
+import { ChatInputCommandInteraction, ApplicationCommandOptionData, PermissionResolvable } from "discord.js";
 import ClientInterface from "./ClientInterface";
 
 export default interface CommandInterface {
@@ -14,5 +14,5 @@ export default interface CommandInterface {
     descriptionLocalizations: Record<string, string>;
     options?: ApplicationCommandOptionData[];
 
-    run?(interaction: CommandInteraction): any;
+    run?(interaction: ChatInputCommandInteraction): any;
 };

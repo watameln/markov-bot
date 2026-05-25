@@ -1,13 +1,7 @@
-import { Schema, model } from "mongoose";
+import FileDatabase from "../FileDatabase";
 
-interface BansModel {
-    guildId: string;
-    reason: string;
+export default {
+    findOneAndUpdate: (query: any, update: any, options: any) => FileDatabase.findOneAndUpdate("bans", query, update, options),
+    deleteOne: (query: any) => FileDatabase.deleteOne("bans", query),
+    find: (query: any) => FileDatabase.find("bans", query),
 };
-
-const schema = new Schema<BansModel>({
-    guildId: String,
-    reason: String
-});
-
-export default model("bans", schema);

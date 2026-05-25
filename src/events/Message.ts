@@ -1,8 +1,6 @@
-import { WebhookClient } from "discord.js";
+import { Message, TextChannel, WebhookClient, PermissionsBitField } from "discord.js";
 import Event from "../structures/Event";
 import specialEventList from "../modules/specialEvents";
-
-import { Message, TextChannel } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 import SpecialEventInterface from "../interfaces/SpecialEventInterface";
 
@@ -32,7 +30,7 @@ export default class MessageCreate extends Event {
         const channelId = await database.getChannel();
         const webhook = await database.getWebhook();
         const clientMember = await message.guild.members.fetchMe();
-        const messagePermission = clientMember.permissionsIn(channel)?.has("SEND_MESSAGES");
+        const messagePermission = clientMember.permissionsIn(channel)?.has(PermissionsBitField.Flags.SendMessages);
 
         if (channel && message.channelId == channelId && messagePermission) {
             const hasMention = message.mentions.has(client.user);

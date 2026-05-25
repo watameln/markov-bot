@@ -1,6 +1,6 @@
 import SubCommand from "../../../../structures/SubCommand";
 
-import { CommandInteraction } from "discord.js/typings";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction } from "discord.js";
 import ClientInterface from "../../../../interfaces/ClientInterface";
 
 export default class CollectSubCommand extends SubCommand {
@@ -11,7 +11,7 @@ export default class CollectSubCommand extends SubCommand {
             "commands.collectChance.command.description",
             [
                 {
-                    type: "INTEGER",
+                    type: ApplicationCommandOptionType.Integer,
                     name: "commands.collectChance.command.options.0.name",
                     description: "commands.collectChance.command.options.0.description",
                     required: true,
@@ -22,7 +22,7 @@ export default class CollectSubCommand extends SubCommand {
         );
     }
 
-    async run(interaction: CommandInteraction) {
+    async run(interaction: ChatInputCommandInteraction) {
         const lng = { lng: interaction.locale };
 
         let chance = interaction.options.getInteger(this.options[0].name);

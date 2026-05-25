@@ -3,15 +3,11 @@ dotenv.config();
 
 if (!process.env.BOT_TOKEN && !process.env.TEST_BOT_TOKEN) {
     throw new Error("[env] Missing bot token");
-} else if (!process.env.DB_URI) {
-    throw new Error("[env] Missing database URI");
-} else if (!process.env.CRYPTO_SECRET) {
-    throw new Error("[env] Missing cryptography secret");
 }
 
 import * as path from "path";
 import axios from "axios";
-import { ShardingManager, MessageEmbed, WebhookClient } from "discord.js";
+import { ShardingManager, EmbedBuilder, WebhookClient } from "discord.js";
 import { ChildProcess } from "child_process";
 
 export default new class MarkovBOT {
@@ -32,7 +28,7 @@ export default new class MarkovBOT {
             console.log(shardTag, "Starting new shard...");
 
             if (this.webhook) {
-                let embed = new MessageEmbed()
+                let embed = new EmbedBuilder()
                     .setTitle("Shard status")
                     .setColor(0xedca31)
                     .setDescription(`Shard ${shard.id} is starting.`)
@@ -46,7 +42,7 @@ export default new class MarkovBOT {
                 console.log(shardTag, "Connected to Discord.");
 
                 if (this.webhook) {
-                    let embed = new MessageEmbed()
+                    let embed = new EmbedBuilder()
                         .setTitle("Shard status")
                         .setColor(0x32d35b)
                         .setDescription(`Shard ${shard.id} just connected to Discord.`)
@@ -68,7 +64,7 @@ export default new class MarkovBOT {
                 console.log(shardTag, "Disconnected.");
 
                 if (this.webhook) {
-                    let embed = new MessageEmbed()
+                    let embed = new EmbedBuilder()
                         .setTitle("Shard status")
                         .setColor(0xd33235)
                         .setDescription(`Shard ${shard.id} just disconnected.`)
@@ -83,7 +79,7 @@ export default new class MarkovBOT {
                 console.log(shardTag, `Shard died. (exit code: ${p.exitCode})`);
 
                 if (this.webhook) {
-                    let embed = new MessageEmbed()
+                    let embed = new EmbedBuilder()
                         .setTitle("Shard status")
                         .setColor(0xd33235)
                         .setDescription(`Shard ${shard.id} died with exit code ${p.exitCode}.`)

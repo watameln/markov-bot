@@ -1,4 +1,4 @@
-import { Message } from "discord.js/typings";
+import { Message } from "discord.js";
 import ClientInterface from "./ClientInterface";
 
 export default interface SpecialEventInterface {

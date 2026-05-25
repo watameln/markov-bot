@@ -1,7 +1,7 @@
 import { readdirSync } from "fs";
 import * as path from "path";
 
-import { ApplicationCommandData } from "discord.js/typings";
+import { ApplicationCommandData } from "discord.js";
 import CommandInterface from "../interfaces/CommandInterface";
 import ClientInterface from "../interfaces/ClientInterface";
 

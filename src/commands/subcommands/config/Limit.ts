@@ -1,6 +1,6 @@
 import SubCommand from "../../../structures/SubCommand";
 
-import { CommandInteraction } from "discord.js/typings";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction } from "discord.js";
 import ClientInterface from "../../../interfaces/ClientInterface";
 
 export default class LimitSubCommand extends SubCommand {
@@ -11,7 +11,7 @@ export default class LimitSubCommand extends SubCommand {
             "commands.limit.command.description",
             [
                 {
-                    type: "INTEGER",
+                    type: ApplicationCommandOptionType.Integer,
                     name: "commands.limit.command.options.0.name",
                     description: "commands.limit.command.options.0.description",
                     minValue: 5,
@@ -21,7 +21,7 @@ export default class LimitSubCommand extends SubCommand {
         );
     }
 
-    async run(interaction: CommandInteraction) {
+    async run(interaction: ChatInputCommandInteraction) {
         const lng = { lng: interaction.locale };
         const database = await this.client.database.fetch(interaction.guildId);
 

@@ -1,6 +1,6 @@
 import Command from "../structures/Command";
 
-import { CommandInteraction } from "discord.js/typings";
+import { ChatInputCommandInteraction } from "discord.js";
 import ClientInterface from "../interfaces/ClientInterface";
 
 export default class PingCommand extends Command {
@@ -15,7 +15,7 @@ export default class PingCommand extends Command {
         );
     }
 
-    async run(interaction: CommandInteraction) {
+    async run(interaction: ChatInputCommandInteraction) {
         return interaction.reply(`🏓 **Ping:** ${this.client.ws.ping} ms.`);
     }
 }

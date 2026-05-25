@@ -9,11 +9,10 @@ interface GuildDatabaseInterface {
     once(event: "ready", listener: Function): this;
 }
 
-interface DecryptedText {
+interface StoredText {
     id: string;
     author: string;
-    decrypted: string;
-    encrypted: string;
+    text: string;
 };
 
 export default class GuildDatabase extends EventEmitter implements GuildDatabaseInterface {
@@ -25,7 +24,7 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
     public channelId: string;
     public webhook: string;
     public textsLimit: number = 500;
-    public texts: DecryptedText[] = [];
+    public texts: StoredText[] = [];
     public collectPercentage: number;
     public sendingPercentage: number;
     public replyPercentage: number;
@@ -76,18 +75,18 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
         try {
             await this.getTexts();
 
-            const encryptedText = this.client.crypto.encrypt(text, author, id);
+            const storedText = { id, author, text };
+            this.texts.push(storedText);
 
-            await TextsModel.updateOne({ guildId: this.guildId }, {
-                $push: { list: encryptedText },
-                expiresAt: this.expiresTimestamp()
-            }, { upsert: true, new: true }).exec();
-
-            this.texts.push({ id, author, decrypted: text, encrypted: encryptedText });
-            if (this.texts.length > this.textsLimit)
+            if (this.texts.length > this.textsLimit) {
                 await this.deleteFirstText(this.texts.length - this.textsLimit);
+            } else {
+                await TextsModel.updateOne({ guildId: this.guildId }, {
+                    $set: { list: this.texts, expiresAt: this.expiresTimestamp() }
+                }, { upsert: true, new: true }).exec();
+            }
 
-            this.markovChains.generateDictionary(this.texts.map((v) => v.decrypted));
+            this.markovChains.generateDictionary(this.texts.map((v) => v.text));
         } catch(e) {
             console.error("[Database]", `Failed to add a text to database of guild ${this.guildId}:\n`, e);
         }
@@ -225,20 +224,15 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
      */
     async deleteText(id: string): Promise<void> {
         const idx = this.texts.findIndex((v) => v.id == id);
-        let info: DecryptedText;
 
         try {
             if (idx != -1) {
-                info = this.texts[idx];
-                if (!info?.encrypted || !info?.decrypted) return;
-
                 this.texts.splice(idx, 1);
-                this.markovChains.generateDictionary(this.texts.map((v) => v.decrypted));
-
-                await TextsModel.updateOne({ guildId: this.guildId }, { $pull: { list: info.encrypted } }).exec();
+                this.markovChains.generateDictionary(this.texts.map((v) => v.text));
+                await TextsModel.updateOne({ guildId: this.guildId }, { $set: { list: this.texts } }).exec();
             }
         } catch(e) {
-            console.error("[Database]", `Failed to delete the text "${info?.encrypted}" of guild ${this.guildId}:\n`, e);
+            console.error("[Database]", `Failed to delete a text of guild ${this.guildId}:\n`, e);
         }
     }
 
@@ -252,18 +246,10 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
         try {
             await this.getTexts();
 
-            let update: object = { $pop: { list: -1 } };
-            if (range > 1) {
-                update = { $push: { list: { $each: [], $slice: -Math.abs(this.texts.length - range) } } };
-            }
+            this.texts.splice(0, range);
+            await TextsModel.updateOne({ guildId: this.guildId }, { $set: { list: this.texts } }).exec();
 
-            await TextsModel.updateOne({ guildId: this.guildId }, update).exec();
-
-            for (let i=0; i < range; i++) {
-                this.texts.shift();
-            }
-
-            this.markovChains.generateDictionary(this.texts.map((v) => v.decrypted));
+            this.markovChains.generateDictionary(this.texts.map((v) => v.text));
         } catch(e) {
             console.error("[Database]", `Failed to delete the first texts (range: ${range}) of guild ${this.guildId}:\n`, e);
         }
@@ -296,35 +282,16 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
     async deleteUserTexts(user: string): Promise<void> {
         await this.getTexts();
 
-        let userTexts = this.texts.filter(v => v.author == user).map(v => v.decrypted);
-        if (userTexts.length < 1) return;
+        const initialLength = this.texts.length;
+        this.texts = this.texts.filter(v => v.author !== user);
+        if (this.texts.length === initialLength) return;
 
         try {
-            let query = await TextsModel.updateOne({ guildId: this.guildId },
-                {
-                    $pull: {
-                        list: {
-                            $regex: `^[0-9a-z+/=]+:[0-9a-z+/=]+:${user}`,
-                            $options: "i"
-                        }
-                    }
-                }
-            ).exec();
-
-            if (query.modifiedCount < 1)
-                throw new Error("Modified count equals to 0");
-
-            userTexts.forEach((v) => {
-                let i = this.texts.findIndex((_v) => v == _v.decrypted);
-                if (i >= 0) this.texts.splice(i, 1);
-            });
-
-            this.markovChains.generateDictionary(this.texts.map((v) => v.decrypted));
-
+            await TextsModel.updateOne({ guildId: this.guildId }, { $set: { list: this.texts } }).exec();
+            this.markovChains.generateDictionary(this.texts.map((v) => v.text));
             return;
         } catch(e) {
             console.error("[Database]", `Failed to delete all texts of user ${user}:\n`, e);
-            
             throw e;
         }
     }
@@ -336,27 +303,19 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
      */
     async updateText(id: string, text: string) {
         const idx = this.texts.findIndex((v) => v.id == id);
-        let info: DecryptedText;
 
         try {
             if (idx != -1) {
-                info = this.texts[idx];
-                if (!info) return;
-
-                const encryptedText = this.client.crypto.encrypt(text, info.author, id);
-
+                this.texts[idx].text = text;
                 await TextsModel.updateOne(
                     { guildId: this.guildId },
-                    { $set: { "list.$[element]": encryptedText } },
-                    { arrayFilters: [ { element: info.encrypted } ] }
+                    { $set: { list: this.texts } }
                 ).exec();
 
-                info.decrypted = text;
-                info.encrypted = encryptedText;
-                this.markovChains.generateDictionary(this.texts.map((v) => v.decrypted));
+                this.markovChains.generateDictionary(this.texts.map((v) => v.text));
             }
         } catch(e) {
-            console.error("[Database]", `Failed to update the text "${info?.encrypted}" of guild ${this.guildId}:\n`, e);
+            console.error("[Database]", `Failed to update text of guild ${this.guildId}:\n`, e);
         }
     }
 
@@ -504,7 +463,7 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
      * Loads the texts from the database.
      * @returns The decrypted texts.
      */
-    async getTexts(): Promise<DecryptedText[]> {
+    async getTexts(): Promise<StoredText[]> {
         this.lastActivity = Date.now();
 
         if (!this.loadedTexts) {
@@ -512,8 +471,11 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
                 let query = await TextsModel.findOne({ guildId: this.guildId }).exec();
 
                 if (query?.list) {
-                    this.texts = await Promise.all(query.list.map(v => this.client.crypto.decrypt(v)));
-                    this.markovChains.generateDictionary(this.texts.map((v) => v.decrypted));
+                    this.texts = query.list.map((item: any) => typeof item === "string"
+                        ? { id: "", author: "", text: item }
+                        : item
+                    );
+                    this.markovChains.generateDictionary(this.texts.map((v) => v.text));
                     this.loadedTexts = true;
 
                     return this.texts;

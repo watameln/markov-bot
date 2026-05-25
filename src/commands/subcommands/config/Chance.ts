@@ -2,7 +2,7 @@ import SubCommandGroup from "../../../structures/SubCommandGroup";
 
 import ClientInterface from "../../../interfaces/ClientInterface";
 import SubCommandInterface from "../../../interfaces/SubCommandInterface";
-import { CommandInteraction } from "discord.js/typings";
+import { ChatInputCommandInteraction } from "discord.js";
 
 import CollectSubCommand from "./chance/Collect";
 import SendingSubCommand from "./chance/Sending";
@@ -40,7 +40,7 @@ export default class ChanceSubCommandGroup extends SubCommandGroup {
         this.subcommands = subcommands;
     }
 
-    async run(interaction: CommandInteraction) {
+    async run(interaction: ChatInputCommandInteraction) {
         const subCommandName = interaction.options.getSubcommand();
         const subCommand = this.subcommands[subCommandName];
         if (subCommand) return subCommand.run(interaction);

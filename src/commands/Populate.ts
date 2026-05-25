@@ -1,7 +1,5 @@
 import Command from "../structures/Command";
-import { SnowflakeUtil } from "discord.js";
-
-import { CommandInteraction, PermissionResolvable } from "discord.js/typings";
+import { ApplicationCommandOptionType, SnowflakeUtil, ChatInputCommandInteraction, PermissionResolvable } from "discord.js";
 import ClientInterface from "../interfaces/ClientInterface";
 
 export default class PopulateCommand extends Command {
@@ -18,14 +16,14 @@ export default class PopulateCommand extends Command {
             "commands.populate.command.description",
             [
                 {
-                    type: "INTEGER",
+                    type: ApplicationCommandOptionType.Integer,
                     name: "commands.populate.command.options.0.name",
                     description: "commands.populate.command.options.0.description",
                     required: true,
                     minValue: 1
                 },
                 {
-                    type: "USER",
+                    type: ApplicationCommandOptionType.User,
                     name: "commands.populate.command.options.1.name",
                     description: "commands.populate.command.options.1.description"
                 }
@@ -37,7 +35,7 @@ export default class PopulateCommand extends Command {
         this.words = loremIpsum.split(" ").map((v) => v.toLowerCase());
     }
 
-    async run(interaction: CommandInteraction) {
+    async run(interaction: ChatInputCommandInteraction) {
         const amount = interaction.options.getInteger("amount");
         const member = interaction.options.getUser("member")?.id ?? interaction.user.id;
 

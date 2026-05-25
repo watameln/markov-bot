@@ -1,8 +1,6 @@
 import axios from "axios";
-import { WebhookClient } from "discord.js";
+import { ApplicationCommandOptionType, WebhookClient, ChatInputCommandInteraction } from "discord.js";
 import SubCommand from "../../../structures/SubCommand";
-
-import { CommandInteraction } from "discord.js/typings";
 import ClientInterface from "../../../interfaces/ClientInterface";
 
 export default class WebhookSubCommand extends SubCommand {
@@ -13,7 +11,7 @@ export default class WebhookSubCommand extends SubCommand {
             "commands.webhook.command.description",
             [
                 {
-                    type: "STRING",
+                    type: ApplicationCommandOptionType.String,
                     name: "url",
                     description: "commands.webhook.command.options.0.description"
                 }
@@ -21,7 +19,7 @@ export default class WebhookSubCommand extends SubCommand {
         );
     }
 
-    async run(interaction: CommandInteraction) {
+    async run(interaction: ChatInputCommandInteraction) {
         const lng = { lng: interaction.locale };
         const database = await this.client.database.fetch(interaction.guildId);
         

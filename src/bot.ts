@@ -1,8 +1,7 @@
-import { Client, Intents, Collection } from "discord.js";
+import { Client, GatewayIntentBits, Collection } from "discord.js";
 import * as i18next from "i18next";
 import * as i18nbackend from "i18next-fs-backend";
 
-import Cryptography from "./modules/cryptography";
 import DatabaseConnection from "./modules/database/DatabaseConnection";
 import DatabaseManager from "./modules/database/DatabaseManager";
 
@@ -22,8 +21,8 @@ export default new class Bot {
         allowedMentions: { parse: [] },
         failIfNotExists: false,
         intents: [
-            Intents.FLAGS.GUILDS,
-            Intents.FLAGS.GUILD_MESSAGES
+            GatewayIntentBits.Guilds,
+            GatewayIntentBits.GuildMessages
         ],
         sweepers: {
             users: this.sweeper,
@@ -39,7 +38,7 @@ export default new class Bot {
         const { client } = this;
         
         client.config = {
-            admins: [ "283740954328825858" ],
+            admins: [ "442000634716225536" ],
             devGuilds: [],
             links: {
                 website: "https://knwbot.gitbook.io/markov-bot/",
@@ -63,7 +62,6 @@ export default new class Bot {
                 ethereum: "0xCD27fADFf2eDBE6625518A56BceE4237cf78252b"
             }
         };
-        client.crypto = new Cryptography(process.env.CRYPTO_SECRET);
         client.cooldown = new Collection();
         client.commands = new Collection();
         client.database = new DatabaseManager(client);
@@ -103,7 +101,7 @@ export default new class Bot {
     }
 
     private connectDatabase(): Promise<void> {
-        const dbConnection = new DatabaseConnection(process.env.DB_URI);
+        const dbConnection = new DatabaseConnection(process.env.DB_PATH);
 
         return dbConnection.connect();
     }

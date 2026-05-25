@@ -1,6 +1,6 @@
 import Command from "../structures/Command";
 
-import { CommandInteraction } from "discord.js/typings";
+import { ChatInputCommandInteraction } from "discord.js";
 import ClientInterface from "../interfaces/ClientInterface";
 
 export default class TrackingCommand extends Command {
@@ -15,7 +15,7 @@ export default class TrackingCommand extends Command {
         );
     }
 
-    async run(interaction: CommandInteraction) {
+    async run(interaction: ChatInputCommandInteraction) {
         const lng = { lng: interaction.locale };
         const state = await this.client.database.toggleTrack(interaction.user.id);
 

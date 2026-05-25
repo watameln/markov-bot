@@ -1,0 +1,91 @@
+
+> markov-bot@1.0.0 build
+> tsc
+
+src/commands/Ban.ts(9,12): error TS2820: Type '"MANAGE_GUILD"' is not assignable to type 'PermissionResolvable'. Did you mean '"ManageGuild"'?
+src/commands/Ban.ts(18,21): error TS2322: Type 'string' is not assignable to type 'ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup | ApplicationCommandOptionType.String | ApplicationCommandOptionType.Channel | CommandOptionNumericResolvableType | CommandOptionNonChoiceResolvableType'.
+src/commands/Ban.ts(24,21): error TS2322: Type 'string' is not assignable to type 'ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup | ApplicationCommandOptionType.String | ApplicationCommandOptionType.Channel | CommandOptionNumericResolvableType | CommandOptionNonChoiceResolvableType'.
+src/commands/Ban.ts(34,35): error TS2339: Property 'options' does not exist on type 'CommandInteraction<CacheType>'.
+src/commands/Ban.ts(35,36): error TS2339: Property 'options' does not exist on type 'CommandInteraction<CacheType>'.
+src/commands/Config.ts(16,12): error TS2820: Type '"MANAGE_GUILD"' is not assignable to type 'PermissionResolvable'. Did you mean '"ManageGuild"'?
+src/commands/Config.ts(53,44): error TS2339: Property 'options' does not exist on type 'CommandInteraction<CacheType>'.
+src/commands/DeleteTexts.ts(1,105): error TS2724: '"discord.js"' has no exported member named 'StringSelectMenuOptionData'. Did you mean 'StringSelectMenuComponentData'?
+src/commands/DeleteTexts.ts(20,21): error TS2322: Type 'string' is not assignable to type 'ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup | ApplicationCommandOptionType.String | ApplicationCommandOptionType.Channel | CommandOptionNumericResolvableType | CommandOptionNonChoiceResolvableType'.
+src/commands/DeleteTexts.ts(36,34): error TS2339: Property 'options' does not exist on type 'CommandInteraction<CacheType>'.
+src/commands/DeleteTexts.ts(224,47): error TS2339: Property 'components' does not exist on type 'TopLevelComponent'.
+  Property 'components' does not exist on type 'FileComponent'.
+src/commands/Generate.ts(14,21): error TS2322: Type 'string' is not assignable to type 'ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup | ApplicationCommandOptionType.String | ApplicationCommandOptionType.Channel | CommandOptionNumericResolvableType | CommandOptionNonChoiceResolvableType'.
+src/commands/Generate.ts(27,34): error TS2339: Property 'options' does not exist on type 'CommandInteraction<CacheType>'.
+src/commands/Populate.ts(8,12): error TS2820: Type '"MANAGE_GUILD"' is not assignable to type 'PermissionResolvable'. Did you mean '"ManageGuild"'?
+src/commands/Populate.ts(19,21): error TS2322: Type 'string' is not assignable to type 'ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup | ApplicationCommandOptionType.String | ApplicationCommandOptionType.Channel | CommandOptionNumericResolvableType | CommandOptionNonChoiceResolvableType'.
+src/commands/Populate.ts(26,21): error TS2322: Type 'string' is not assignable to type 'ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup | ApplicationCommandOptionType.String | ApplicationCommandOptionType.Channel | CommandOptionNumericResolvableType | CommandOptionNonChoiceResolvableType'.
+src/commands/Populate.ts(39,36): error TS2339: Property 'options' does not exist on type 'CommandInteraction<CacheType>'.
+src/commands/Populate.ts(40,36): error TS2339: Property 'options' does not exist on type 'CommandInteraction<CacheType>'.
+src/commands/Populate.ts(54,9): error TS2322: Type 'bigint' is not assignable to type 'string'.
+src/commands/Populate.ts(54,39): error TS2559: Type 'number' has no properties in common with type 'SnowflakeGenerateOptions'.
+src/commands/subcommands/config/Chance.ts(44,44): error TS2339: Property 'options' does not exist on type 'CommandInteraction<CacheType>'.
+src/commands/subcommands/config/chance/Collect.ts(14,21): error TS2322: Type 'string' is not assignable to type 'ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup | ApplicationCommandOptionType.String | ApplicationCommandOptionType.Channel | CommandOptionNumericResolvableType | CommandOptionNonChoiceResolvableType'.
+src/commands/subcommands/config/chance/Collect.ts(28,34): error TS2339: Property 'options' does not exist on type 'CommandInteraction<CacheType>'.
+src/commands/subcommands/config/chance/Reply.ts(14,21): error TS2322: Type 'string' is not assignable to type 'ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup | ApplicationCommandOptionType.String | ApplicationCommandOptionType.Channel | CommandOptionNumericResolvableType | CommandOptionNonChoiceResolvableType'.
+src/commands/subcommands/config/chance/Reply.ts(28,34): error TS2339: Property 'options' does not exist on type 'CommandInteraction<CacheType>'.
+src/commands/subcommands/config/chance/Sending.ts(14,21): error TS2322: Type 'string' is not assignable to type 'ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup | ApplicationCommandOptionType.String | ApplicationCommandOptionType.Channel | CommandOptionNumericResolvableType | CommandOptionNonChoiceResolvableType'.
+src/commands/subcommands/config/chance/Sending.ts(28,34): error TS2339: Property 'options' does not exist on type 'CommandInteraction<CacheType>'.
+src/commands/subcommands/config/Channel.ts(14,21): error TS2322: Type 'string' is not assignable to type 'ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup | ApplicationCommandOptionType.String | ApplicationCommandOptionType.Channel | CommandOptionNumericResolvableType | CommandOptionNonChoiceResolvableType'.
+src/commands/subcommands/config/Channel.ts(17,37): error TS2322: Type 'string' is not assignable to type 'ChannelType.GuildText | ChannelType.GuildVoice | ChannelType.GuildCategory | ChannelType.GuildAnnouncement | ChannelType.AnnouncementThread | ChannelType.PublicThread | ChannelType.PrivateThread | ChannelType.GuildStageVoice | ChannelType.GuildForum | ChannelType.GuildMedia'.
+src/commands/subcommands/config/Channel.ts(17,51): error TS2322: Type 'string' is not assignable to type 'ChannelType.GuildText | ChannelType.GuildVoice | ChannelType.GuildCategory | ChannelType.GuildAnnouncement | ChannelType.AnnouncementThread | ChannelType.PublicThread | ChannelType.PrivateThread | ChannelType.GuildStageVoice | ChannelType.GuildForum | ChannelType.GuildMedia'.
+src/commands/subcommands/config/Channel.ts(17,74): error TS2322: Type 'string' is not assignable to type 'ChannelType.GuildText | ChannelType.GuildVoice | ChannelType.GuildCategory | ChannelType.GuildAnnouncement | ChannelType.AnnouncementThread | ChannelType.PublicThread | ChannelType.PrivateThread | ChannelType.GuildStageVoice | ChannelType.GuildForum | ChannelType.GuildMedia'.
+src/commands/subcommands/config/Channel.ts(26,37): error TS2339: Property 'options' does not exist on type 'CommandInteraction<CacheType>'.
+src/commands/subcommands/config/Limit.ts(14,21): error TS2322: Type 'string' is not assignable to type 'ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup | ApplicationCommandOptionType.String | ApplicationCommandOptionType.Channel | CommandOptionNumericResolvableType | CommandOptionNonChoiceResolvableType'.
+src/commands/subcommands/config/Limit.ts(28,35): error TS2339: Property 'options' does not exist on type 'CommandInteraction<CacheType>'.
+src/commands/subcommands/config/Webhook.ts(16,21): error TS2322: Type 'string' is not assignable to type 'ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup | ApplicationCommandOptionType.String | ApplicationCommandOptionType.Channel | CommandOptionNumericResolvableType | CommandOptionNonChoiceResolvableType'.
+src/commands/subcommands/config/Webhook.ts(28,38): error TS2339: Property 'options' does not exist on type 'CommandInteraction<CacheType>'.
+src/commands/Unban.ts(9,12): error TS2820: Type '"MANAGE_GUILD"' is not assignable to type 'PermissionResolvable'. Did you mean '"ManageGuild"'?
+src/commands/Unban.ts(18,21): error TS2322: Type 'string' is not assignable to type 'ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup | ApplicationCommandOptionType.String | ApplicationCommandOptionType.Channel | CommandOptionNumericResolvableType | CommandOptionNonChoiceResolvableType'.
+src/commands/Unban.ts(28,35): error TS2339: Property 'options' does not exist on type 'CommandInteraction<CacheType>'.
+src/events/Interaction.ts(36,21): error TS2322: Type 'InteractionResponse<boolean>' is not assignable to type 'void'.
+src/events/Interaction.ts(43,29): error TS2322: Type 'InteractionResponse<boolean>' is not assignable to type 'void'.
+src/events/Interaction.ts(48,25): error TS2322: Type 'InteractionResponse<boolean>' is not assignable to type 'void'.
+src/events/Interaction.ts(106,17): error TS2322: Type 'InteractionResponse<boolean>' is not assignable to type 'void'.
+src/events/Ready.ts(35,22): error TS2322: Type 'string' is not assignable to type 'ActivityType'.
+src/handlers/EventHandler.ts(5,10): error TS2305: Module '"discord.js"' has no exported member 'WSEventType'.
+src/modules/cryptography/index.ts(31,31): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(algorithm: CipherGCMTypes, key: CipherKey, iv: BinaryLike, options?: CipherGCMOptions): CipherGCM', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'CipherGCMTypes'.
+  Overload 2 of 4, '(algorithm: string, key: CipherKey, iv: BinaryLike, options?: TransformOptions): Cipher', gave the following error.
+    Argument of type 'Buffer' is not assignable to parameter of type 'CipherKey'.
+      Type 'Buffer' is not assignable to type 'Uint8Array<ArrayBufferLike> | DataView<ArrayBufferLike> | KeyObject'.
+        Type 'Buffer' is not assignable to type 'Uint8Array<ArrayBufferLike>'.
+          The types of 'slice(...).buffer' are incompatible between these types.
+            Type 'ArrayBufferLike' is not assignable to type 'ArrayBuffer'.
+              Type 'SharedArrayBuffer' is not assignable to type 'ArrayBuffer'.
+                Types of property '[Symbol.toStringTag]' are incompatible.
+                  Type '"SharedArrayBuffer"' is not assignable to type '"ArrayBuffer"'.
+src/modules/cryptography/index.ts(32,43): error TS2322: Type 'Buffer' is not assignable to type 'Uint8Array<ArrayBufferLike>'.
+  The types of 'slice(...).buffer' are incompatible between these types.
+    Type 'ArrayBufferLike' is not assignable to type 'ArrayBuffer'.
+      Type 'SharedArrayBuffer' is not assignable to type 'ArrayBuffer'.
+        Types of property '[Symbol.toStringTag]' are incompatible.
+          Type '"SharedArrayBuffer"' is not assignable to type '"ArrayBuffer"'.
+src/modules/cryptography/index.ts(32,64): error TS2322: Type 'Buffer' is not assignable to type 'Uint8Array<ArrayBufferLike>'.
+  The types of 'slice(...).buffer' are incompatible between these types.
+    Type 'ArrayBufferLike' is not assignable to type 'ArrayBuffer'.
+      Type 'SharedArrayBuffer' is not assignable to type 'ArrayBuffer'.
+        Types of property '[Symbol.toStringTag]' are incompatible.
+          Type '"SharedArrayBuffer"' is not assignable to type '"ArrayBuffer"'.
+src/modules/cryptography/index.ts(58,37): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(algorithm: CipherGCMTypes, key: CipherKey, iv: BinaryLike, options?: CipherGCMOptions): DecipherGCM', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'CipherGCMTypes'.
+  Overload 2 of 4, '(algorithm: string, key: CipherKey, iv: BinaryLike, options?: TransformOptions): Decipher', gave the following error.
+    Argument of type 'Buffer' is not assignable to parameter of type 'CipherKey'.
+      Type 'Buffer' is not assignable to type 'Uint8Array<ArrayBufferLike> | DataView<ArrayBufferLike> | KeyObject'.
+        Type 'Buffer' is not assignable to type 'Uint8Array<ArrayBufferLike>'.
+          The types of 'slice(...).buffer' are incompatible between these types.
+            Type 'ArrayBufferLike' is not assignable to type 'ArrayBuffer'.
+              Type 'SharedArrayBuffer' is not assignable to type 'ArrayBuffer'.
+                Types of property '[Symbol.toStringTag]' are incompatible.
+                  Type '"SharedArrayBuffer"' is not assignable to type '"ArrayBuffer"'.
+src/modules/specialEvents/events/Time.ts(56,35): error TS2339: Property 'sendTyping' does not exist on type 'DMChannel | PartialDMChannel | PartialGroupDMChannel | NewsChannel | StageChannel | TextChannel | PublicThreadChannel<...> | PrivateThreadChannel | VoiceChannel'.
+  Property 'sendTyping' does not exist on type 'PartialGroupDMChannel'.
+src/modules/specialEvents/events/Time.ts(58,36): error TS2339: Property 'send' does not exist on type 'DMChannel | PartialDMChannel | PartialGroupDMChannel | NewsChannel | StageChannel | TextChannel | PublicThreadChannel<...> | PrivateThreadChannel | VoiceChannel'.
+  Property 'send' does not exist on type 'PartialGroupDMChannel'.
+src/structures/Event.ts(1,10): error TS2305: Module '"discord.js"' has no exported member 'WSEventType'.

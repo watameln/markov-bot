@@ -1,11 +1,7 @@
-import { Schema, model } from "mongoose";
+import FileDatabase from "../FileDatabase";
 
-interface NoTrackModel {
-    userId: string;
+export default {
+    deleteOne: (query: any) => FileDatabase.deleteOne("notrack", query),
+    create: (document: any) => FileDatabase.create("notrack", document),
+    exists: (query: any) => FileDatabase.exists("notrack", query),
 };
-
-const schema = new Schema<NoTrackModel>({
-    userId: String
-});
-
-export default model("notrack", schema);

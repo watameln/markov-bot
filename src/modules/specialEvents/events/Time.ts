@@ -1,6 +1,6 @@
 import { BaseSpecialEvent } from "./BaseSpecialEvent";
 
-import { Message } from "discord.js/typings";
+import { Message } from "discord.js";
 import ClientInterface from "../../../interfaces/ClientInterface";
 
 export class TimeSpecialEvent extends BaseSpecialEvent {

@@ -2,7 +2,7 @@ import Event from "../structures/Event";
 import CommandHandler from "../handlers/CommandHandler";
 import * as status from "./status.json";
 
-import { ActivitiesOptions } from "discord.js/typings";
+import { ActivitiesOptions } from "discord.js";
 import ClientInterface from "../interfaces/ClientInterface";
 
 export default class Ready extends Event {

@@ -7,7 +7,7 @@ import ChanceSubCommand from "./subcommands/config/Chance";
 import WebhookSubCommand from "./subcommands/config/Webhook";
 import LimitSubCommand from "./subcommands/config/Limit";
 
-import { CommandInteraction, PermissionResolvable } from "discord.js/typings";
+import { ChatInputCommandInteraction, PermissionResolvable } from "discord.js";
 import ClientInterface from "../interfaces/ClientInterface";
 import SubCommandInterface from "../interfaces/SubCommandInterface";
 import SubCommandGroupInterface from "../interfaces/SubCommandGroupInterface";
@@ -49,7 +49,7 @@ export default class ConfigCommand extends Command {
         this.subcommands = subcommands;
     }
 
-    async run(interaction: CommandInteraction) {
+    async run(interaction: ChatInputCommandInteraction) {
         const subCommandName = interaction.options.data[0].name;
         const subCommand = this.subcommands[subCommandName];
         if (subCommand) return subCommand.run(interaction);

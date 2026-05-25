@@ -1,6 +1,6 @@
 import Command from "../structures/Command";
 
-import { CommandInteraction, PermissionResolvable } from "discord.js/typings";
+import { ChatInputCommandInteraction, PermissionResolvable } from "discord.js";
 import ClientInterface from "../interfaces/ClientInterface";
 
 export default class UnbanCommand extends Command {
@@ -15,7 +15,7 @@ export default class UnbanCommand extends Command {
             "commands.unban.command.description",
             [
                 {
-                    type: "STRING",
+                    type: ApplicationCommandOptionType.String,
                     name: "commands.unban.command.options.0.name",
                     description: "commands.unban.command.options.0.description",
                     required: true
@@ -24,7 +24,7 @@ export default class UnbanCommand extends Command {
         );
     }
 
-    async run(interaction: CommandInteraction) {
+    async run(interaction: ChatInputCommandInteraction) {
         const guild = interaction.options.getString(this.options[0].name);
 
         await this.client.database.unban(guild);

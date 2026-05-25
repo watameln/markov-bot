@@ -1,6 +1,6 @@
 import Command from "../structures/Command";
 
-import { CommandInteraction } from "discord.js/typings";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction } from "discord.js";
 import ClientInterface from "../interfaces/ClientInterface";
 
 export default class GenerateCommand extends Command {
@@ -11,7 +11,7 @@ export default class GenerateCommand extends Command {
             "commands.generate.command.description",
             [
                 {
-                    type: "INTEGER",
+                    type: ApplicationCommandOptionType.Integer,
                     name: "commands.generate.command.options.0.name",
                     description: "commands.generate.command.options.0.description",
                     minValue: 1,
@@ -21,7 +21,7 @@ export default class GenerateCommand extends Command {
         );
     }
 
-    async run(interaction: CommandInteraction) {
+    async run(interaction: ChatInputCommandInteraction) {
         const database = await this.client.database.fetch(interaction.guildId);
 
         const size = interaction.options.getInteger(this.options[0].name) ?? Math.floor(Math.random() * 50);

@@ -1,7 +1,5 @@
-import { MessageEmbed, WebhookClient } from "discord.js";
+import { EmbedBuilder, WebhookClient, Guild } from "discord.js";
 import Event from "../structures/Event";
-
-import { Guild } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 
 export default class GuildDelete extends Event {
@@ -32,7 +30,7 @@ export default class GuildDelete extends Event {
             description    += `Owner: \`${ownerTag ?? "Unknown"}\` (\`${guild?.ownerId ?? "Unknown"}\`).\n`;
             description    += `Member count: \`${guild?.memberCount ?? "Unknown"}\`.\n`;
 
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle(guild?.name ?? "Unknown")
                 .setColor(0xd33235)
                 .setDescription(description)

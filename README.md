@@ -15,27 +15,14 @@ If you want to download the code and run it in your own bot or make changes, it'
 ### Requirements
 - [Node.JS](https://nodejs.org/) v16+;
 - A [Discord bot](https://discord.com/developers/docs/getting-started);
-- A [MongoDB](https://mongodb.com/) database;
-- Hosting service (to make the bot be online 24/7) or any device that supports Node.JS.
+- Hosting service (to keep the bot online 24/7) or any device that supports Node.JS.
 
 ### Configuring the environment
-First, you need to install [git](https://git-scm.com/) and then clone this repository with the command `git clone https://github.com/knownasbot/markov-bot` or by clicking the **Download** button.
+First, install [git](https://git-scm.com/) and clone the repository with `git clone https://github.com/knownasbot/markov-bot` or download the source.
 
 Go inside the repository folder and install the dependencies with `npm install`. You need to have [Node.JS](https://nodejs.org/) installed on your computer/server.
 
-Copy the file `.env.example` and rename it to `.env`. Open the file in a text editor and fill the variables `BOT_TOKEN`, `DB_URI` and `CRYPTO_SECRET`. Variables with `#` at the beginning are optional.
-
-You need a 128-bit hex string to make the stored texts secure. You can generate it using any tool, or with Crypto module of NodeJS:
-```js
-crypto.randomBytes(16).toString("hex");
-// It will generate strings like:
-// '0c98812d1bc43fd95d073eb183ff2087'
-// 'f901e4e08421baa5ac096f62512da563'
-// '3b982b6a86ce54c015aa0273814a8e9c'
-// ...
-```
-
-Pick the generated hex and put it in the `CRYPTO_SECRET` variable.
+Copy the file `.env.example` and rename it to `.env`. Open the file in a text editor and fill the variable `BOT_TOKEN`. You can optionally set `DB_PATH` to a custom JSON file path; otherwise it defaults to `./data/database.json`. Variables with `#` at the beginning are optional.
 
 ### Starting the bot
 After configuring the environment, build the bot code to JavaScript with the command `npm run build`. It will be transpiled to the folder `./dist/`.
@@ -47,10 +34,10 @@ First you need to have Docker and Docker-Compose installed in you're pc.
 - You can view the Docker Installation Docs be clicking [here](https://docs.docker.com/engine/install/).
 - Also the Docker Compose Docs can be viewed by clicking [here](https://docs.docker.com/compose/install/).
 
-After the Docker Setup you need open a terminal inside Docker Folder where you cloned the repo to build the docker container be using `docker build --no-cache -t knownasbot/markov-bot .`.
+After the Docker setup, open a terminal inside the repository folder and build the Docker container using `docker build --no-cache -t knownasbot/markov-bot .`.
 
-When the process of build is finished you can run the bot docker container by using the following method:
-- `docker-compose up -d` but require you need to change the `.env.example` to `.env` and fill the variables `BOT_TOKEN`, `DB_URI` and `CRYPTO_SECRET` [like sayed above](https://github.com/knownasbot/markov-bot#configuring-the-environment).
+When the build is finished you can run the bot container by using:
+- `docker-compose up -d` but you need to copy `.env.example` to `.env` and fill the variable `BOT_TOKEN` [as described above](https://github.com/knownasbot/markov-bot#configuring-the-environment).
 
 ## Contributing
 If you want to contribute by improving the code or translating texts to other languages, see the **[Contributing](/CONTRIBUTING.md)** before doing anything.

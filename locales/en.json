@@ -297,7 +297,7 @@
                 },
                 {
                     "name": "How was this bot made?",
-                    "value": "The bot was developed using [TypeScript](https://www.typescriptlang.org) (an improvement on JavaScript), using [Discord.js](https://discord.js.org) in [Node.js](https://nodejs.org/en/about). Initially the database was a [JSON](https://pt.wikipedia.org/wiki/JSON) file, but soon [MongoDB](https://en.wikipedia.org/wiki/MongoDB) was used. Currently hosted on a [friend's]({{friendURL}}) host at [DigitalOcean](https://digitalocean.com/)."
+                    "value": "The bot was developed using [TypeScript](https://www.typescriptlang.org) (an improvement on JavaScript), using [Discord.js](https://discord.js.org) in [Node.js](https://nodejs.org/en/about). It stores data locally in JSON and can be hosted on any device. Currently hosted on a [friend's]({{friendURL}}) host at [DigitalOcean](https://digitalocean.com/)."
                 },
                 {
                     "name": "Do you have any plans to scale the bot?",

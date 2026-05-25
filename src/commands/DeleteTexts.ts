@@ -1,14 +1,11 @@
-import { Message, MessageActionRow, MessageButton, MessageSelectMenu, SnowflakeUtil } from "discord.js";
+import { ActionRowBuilder, ApplicationCommandOptionType, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, Message, StringSelectMenuBuilder, StringSelectMenuComponentData, PermissionsBitField, SnowflakeUtil } from "discord.js";
 import Command from "../structures/Command";
-
-import { CommandInteraction, MessageSelectMenuOptions, MessageSelectOption } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 
-interface DecryptedText {
+interface StoredText {
     id: string;
     author: string;
-    decrypted: string;
-    encrypted: string;
+    text: string;
 };
 
 export default class DeleteTextsCommand extends Command {
@@ -19,7 +16,7 @@ export default class DeleteTextsCommand extends Command {
             "commands.deleteTexts.command.description",
             [
                 {
-                    type: "USER",
+                    type: ApplicationCommandOptionType.User,
                     name: "commands.deleteTexts.command.options.0.name",
                     description: "commands.deleteTexts.command.options.0.description"
                 }
@@ -27,7 +24,7 @@ export default class DeleteTextsCommand extends Command {
         );
     }
 
-    async run(interaction: CommandInteraction) {
+    async run(interaction: ChatInputCommandInteraction) {
         let currentPage = 0;
         const itemsPerPage = 25;
 
@@ -40,7 +37,7 @@ export default class DeleteTextsCommand extends Command {
         if (member == interaction.user.id) {
             deletePermission = true;
         } else if (typeof interaction.member.permissions != "string") {
-            deletePermission = interaction.member.permissions.has("MANAGE_MESSAGES");
+            deletePermission = interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages);
         }
 
         let texts = member ? dbTexts.filter((v) => member ? v.author == member : true) : dbTexts;
@@ -70,13 +67,12 @@ export default class DeleteTextsCommand extends Command {
                         return;
                     }
 
-                    const confirmRow = new MessageActionRow()
+                    const confirmRow = new ActionRowBuilder<ButtonBuilder>()
                         .addComponents(
-                            new MessageButton({
-                                customId: "confirm",
-                                label: this.t("commands.deleteTexts.texts.confirmButton", lng),
-                                style: "SUCCESS"
-                            })
+                            new ButtonBuilder()
+                                .setCustomId("confirm")
+                                .setLabel(this.t("commands.deleteTexts.texts.confirmButton", lng))
+                                .setStyle(ButtonStyle.Success)
                         );
 
                     const confirmMessage = await i.reply({
@@ -146,44 +142,40 @@ export default class DeleteTextsCommand extends Command {
                     });
                 }
 
-                const infoRow = new MessageActionRow()
+                const infoRow = new ActionRowBuilder<ButtonBuilder>()
                     .addComponents(
-                        new MessageButton({
-                            customId: "infou",
-                            label: text.author,
-                            style: "SECONDARY",
-                            emoji: "👤",
-                            disabled: true
-                        }),
-                        new MessageButton({
-                            customId: "infot",
-                            label: new Date(SnowflakeUtil.timestampFrom(text.id)).toLocaleString(i.locale),
-                            style: "SECONDARY",
-                            emoji: "📆",
-                            disabled: true
-                        }),
-                        new MessageButton({
-                            label: this.t("commands.deleteTexts.texts.messageButton", lng),
-                            style: "LINK",
-                            emoji: "💬",
-                            url: `https://discord.com/channels/${i.guildId}/${await database.getChannel()}/${id}`
-                        }),
+                        new ButtonBuilder()
+                            .setCustomId("infou")
+                            .setLabel(text.author)
+                            .setStyle(ButtonStyle.Secondary)
+                            .setEmoji("👤")
+                            .setDisabled(true),
+                        new ButtonBuilder()
+                            .setCustomId("infot")
+                            .setLabel(new Date(SnowflakeUtil.timestampFrom(text.id)).toLocaleString(i.locale))
+                            .setStyle(ButtonStyle.Secondary)
+                            .setEmoji("📆")
+                            .setDisabled(true),
+                        new ButtonBuilder()
+                            .setLabel(this.t("commands.deleteTexts.texts.messageButton", lng))
+                            .setStyle(ButtonStyle.Link)
+                            .setEmoji("💬")
+                            .setURL(`https://discord.com/channels/${i.guildId}/${await database.getChannel()}/${id}`)
                     );
 
-                const buttonsRow = new MessageActionRow()
+                const buttonsRow = new ActionRowBuilder<ButtonBuilder>()
                     .addComponents(
-                        new MessageButton({
-                            customId: `delete-${id}`,
-                            label: this.t("commands.deleteTexts.texts.deleteButton", lng),
-                            style: "DANGER",
-                            disabled: text.author != i.user.id && !deletePermission
-                        })
+                        new ButtonBuilder()
+                            .setCustomId(`delete-${id}`)
+                            .setLabel(this.t("commands.deleteTexts.texts.deleteButton", lng))
+                            .setStyle(ButtonStyle.Danger)
+                            .setDisabled(text.author != i.user.id && !deletePermission)
                     );
 
-                if (text.decrypted.length > 2000) text.decrypted = text.decrypted.slice(0, 2000 -3) + "...";
+                if (text.text.length > 2000) text.text = text.text.slice(0, 2000 -3) + "...";
 
                 const m = await i.reply({
-                    content: text.decrypted,
+                    content: text.text,
                     ephemeral: true,
                     fetchReply: true,
                     components: [ infoRow, buttonsRow ]
@@ -243,14 +235,14 @@ export default class DeleteTextsCommand extends Command {
         });
     }
 
-    private getPageComponents(author: string, texts: DecryptedText[], hasMember: boolean, page: number, itemsPerPage: number, locale: string): MessageActionRow[] {
+    private getPageComponents(author: string, texts: StoredText[], hasMember: boolean, page: number, itemsPerPage: number, locale: string): ActionRowBuilder<any>[] {
         texts.sort((a, b) => SnowflakeUtil.timestampFrom(a.id) - SnowflakeUtil.timestampFrom(b.id));
 
         const items = texts.slice(page * itemsPerPage, page * itemsPerPage + itemsPerPage);
-        const options: MessageSelectOption[] = [];
+        const options: StringSelectMenuComponentData[] = [];
 
         items.forEach((v) => {
-            const label = v.decrypted.slice(0, 100);
+            const label = v.text.slice(0, 100);
             if (label.length < 0 || options.findIndex((opt) => opt.value == v.id) != -1) return;
 
             const addedAt = new Date(SnowflakeUtil.timestampFrom(v.id));
@@ -264,10 +256,9 @@ export default class DeleteTextsCommand extends Command {
             });
         });
 
-        const menu = new MessageSelectMenu({
-            customId: "menu",
-            options
-        } as MessageSelectMenuOptions);
+        const menu = new StringSelectMenuBuilder()
+            .setCustomId("menu")
+            .setOptions(options);
 
         if (texts.length < 1) {
             menu.setDisabled(true);
@@ -279,63 +270,56 @@ export default class DeleteTextsCommand extends Command {
             ]);
         }
 
-        const menuRow = new MessageActionRow()
+        const menuRow = new ActionRowBuilder<StringSelectMenuBuilder>()
             .addComponents(menu);
 
         let pages = Math.ceil(texts.length / itemsPerPage);
         pages     = pages < 1 ? 1 : pages;
-        const buttonsRow = new MessageActionRow()
+        const buttonsRow = new ActionRowBuilder<ButtonBuilder>()
             .addComponents(
-                new MessageButton({
-                    customId: "first",
-                    label: "<<",
-                    style: "PRIMARY",
-                    disabled: page + 1 <= 1
-                }),
-                new MessageButton({
-                    customId: "previous",
-                    label: "<",
-                    style: "PRIMARY",
-                    disabled: page + 1 <= 1
-                }),
-                new MessageButton({
-                    customId: "pages",
-                    label: `${page + 1}/${pages}`,
-                    style: "SECONDARY",
-                    disabled: true
-                }),
-                new MessageButton({
-                    customId: "next",
-                    label: ">",
-                    style: "PRIMARY",
-                    disabled: page + 1 == pages
-                }),
-                new MessageButton({
-                    customId: "last",
-                    label: ">>",
-                    style: "PRIMARY",
-                    disabled: page + 1 == pages
-                })
+                new ButtonBuilder()
+                    .setCustomId("first")
+                    .setLabel("<<")
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(page + 1 <= 1),
+                new ButtonBuilder()
+                    .setCustomId("previous")
+                    .setLabel("<")
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(page + 1 <= 1),
+                new ButtonBuilder()
+                    .setCustomId("pages")
+                    .setLabel(`${page + 1}/${pages}`)
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(true),
+                new ButtonBuilder()
+                    .setCustomId("next")
+                    .setLabel(">")
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(page + 1 == pages),
+                new ButtonBuilder()
+                    .setCustomId("last")
+                    .setLabel(">>")
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(page + 1 == pages)
             );
 
-        const deleteRow = new MessageActionRow()
+        const deleteRow = new ActionRowBuilder<ButtonBuilder>()
             .addComponents(
-                new MessageButton({
-                    customId: "deleteall",
-                    label: this.t("commands.deleteTexts.texts.deleteAllButton", { lng: locale }),
-                    style: "DANGER",
-                    disabled: texts.length < 1
-                })
+                new ButtonBuilder()
+                    .setCustomId("deleteall")
+                    .setLabel(this.t("commands.deleteTexts.texts.deleteAllButton", { lng: locale }))
+                    .setStyle(ButtonStyle.Danger)
+                    .setDisabled(texts.length < 1)
             );
 
         if (!hasMember) {
             deleteRow.addComponents(
-                new MessageButton({
-                    customId: "mytexts",
-                    label: this.t("commands.deleteTexts.texts.myMessages", { lng: locale }),
-                    style: "PRIMARY",
-                    disabled: texts.filter((v) => v.author == author).length < 1
-                })
+                new ButtonBuilder()
+                    .setCustomId("mytexts")
+                    .setLabel(this.t("commands.deleteTexts.texts.myMessages", { lng: locale }))
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(texts.filter((v) => v.author == author).length < 1)
             );
         }
 
