@@ -12,6 +12,7 @@ export default class MessageCreate extends Event {
     async run(client: ClientInterface, message: Message): Promise<void> {
         if (
             message.author.bot ||
+            !message.guildId ||
             !message.content ||
             message.content.trim().length < 1 ||
             await client.database.isBanned(message.guildId)
@@ -27,66 +28,68 @@ export default class MessageCreate extends Event {
             return;
         }
 
+        if (!channel) return;
+
         const channelId = await database.getChannel();
         const webhook = await database.getWebhook();
         const clientMember = await message.guild.members.fetchMe();
         const messagePermission = clientMember.permissionsIn(channel)?.has(PermissionsBitField.Flags.SendMessages);
+        const collectPercentage = await database.getCollectionPercentage();
 
-        if (channel && message.channelId == channelId && messagePermission) {
-            const hasMention = message.mentions.has(client.user);
-            const textsLength = await database.getTextsLength();
-            let guildCooldown = client.cooldown.get(message.guildId) ?? 0;
-            let sendPercentage = await database.getSendingPercentage();
-            let collectPercentage = await database.getCollectionPercentage();
+        if (Math.random() <= collectPercentage) {
+            client.database.isTrackAllowed(message.author.id)
+                .then(async () => await database.addText(message.content, message.author.id, message.id))
+                .catch(() => {});
+        }
 
-            if (Math.random() <= collectPercentage) {
-                client.database.isTrackAllowed(message.author.id)
-                    .then(async () => await database.addText(message.content, message.author.id, message.id))
-                    .catch(() => {});
+        if (!channelId || message.channelId !== channelId || !messagePermission) return;
+
+        const hasMention = message.mentions.has(client.user);
+        const textsLength = await database.getTextsLength();
+        let guildCooldown = client.cooldown.get(message.guildId) ?? 0;
+        let sendPercentage = await database.getSendingPercentage();
+
+        if (textsLength < 5) return;
+        if (hasMention && guildCooldown + 1000 < Date.now()) {
+            sendPercentage = await database.getReplyPercentage();
+            guildCooldown = 0;
+        }
+
+        if (Math.random() <= sendPercentage && guildCooldown + 15000 < Date.now()) {
+            client.cooldown.set(message.guildId, Date.now());
+
+            if (Math.random() <= 0.05) {
+                const eventKeys = Object.keys(specialEventList);
+                let RandomEvent: SpecialEventInterface = new specialEventList[eventKeys[Math.floor(Math.random() * eventKeys.length)]]();
+
+                try {
+                    return await RandomEvent.run(client, message);
+                } catch {};
             }
 
-            if (textsLength < 5) return;
-            if (hasMention && guildCooldown + 1000 < Date.now()) {
-                sendPercentage = await database.getReplyPercentage();
-                guildCooldown = 0;
-            }
+            let generatedText = database.markovChains.generateChain(Math.floor(Math.random() * 50));
+            if (generatedText && generatedText.trim().length > 0) {
+                let timeout = Math.floor(5 + Math.random() * 5) * 1000;
 
-            if (Math.random() <= sendPercentage && guildCooldown + 15000 < Date.now()) {      
-                client.cooldown.set(message.guildId, Date.now());
-                
-                if (Math.random() <= 0.05) {
-                    const eventKeys = Object.keys(specialEventList);
-                    let RandomEvent: SpecialEventInterface = new specialEventList[eventKeys[Math.floor(Math.random() * eventKeys.length)]]();
-                    
+                if (!webhook) {
                     try {
-                        return await RandomEvent.run(client, message);
-                    } catch {};
-                }
+                        await channel.sendTyping();
 
-                let generatedText = database.markovChains.generateChain(Math.floor(Math.random() * 50));
-                if (generatedText && generatedText.trim().length > 0) {
-                    let timeout = Math.floor(5 + Math.random() * 5) * 1000;
-
-                    if (!webhook) {
-                        try {
-                            await channel.sendTyping();
-
-                            setTimeout(async () => {
-                                try {
-                                    if (hasMention) await message.reply(generatedText)
-                                    else await channel.send(generatedText);
-                                } catch {}; // Probably has no permission
-                            }, timeout);
-                        } catch {}; // Probably has no permission
-                    } else {
                         setTimeout(async () => {
                             try {
-                                let webhookClient = new WebhookClient({ url: webhook }, { allowedMentions: { parse: [] } });
-
-                                await webhookClient.send(generatedText);
-                            } catch {};
+                                if (hasMention) await message.reply(generatedText)
+                                else await channel.send(generatedText);
+                            } catch {}; // Probably has no permission
                         }, timeout);
-                    }
+                    } catch {}; // Probably has no permission
+                } else {
+                    setTimeout(async () => {
+                        try {
+                            let webhookClient = new WebhookClient({ url: webhook }, { allowedMentions: { parse: [] } });
+
+                            await webhookClient.send(generatedText);
+                        } catch {};
+                    }, timeout);
                 }
             }
         }

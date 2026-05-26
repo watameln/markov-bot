@@ -23,9 +23,6 @@ export default class MessageDeleteBulk extends Event {
         const database = await client.database.fetch(messages.guild_id);
         if (!database.toggledActivity) return;
 
-        const channelId = await database.getChannel();
-        if (messages.channel_id != channelId) return;
-
         for (let id of messages.ids) {
             database.deleteText(id);
         }

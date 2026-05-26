@@ -23,9 +23,6 @@ export default class MessageDelete extends Event {
         const database = await client.database.fetch(message.guild_id);
         if (!database.toggledActivity) return;
 
-        const channelId = await database.getChannel();
-        if (message.channel_id != channelId) return;
-
         database.deleteText(message.id);
     }
 }
