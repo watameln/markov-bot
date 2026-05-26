@@ -30,25 +30,6 @@ export default class GuildCreate extends Event {
             const deleteCommand = commands.find((v) => v.name == deleteCommandName);
 
             try {
-                const row = new ActionRowBuilder<ButtonBuilder>()
-                    .addComponents(
-                        new ButtonBuilder()
-                            .setEmoji("💡")
-                            .setLabel(t("vars.gettingStarted", lng))
-                            .setURL(client.config.links.website)
-                            .setStyle(ButtonStyle.Link),
-                        new ButtonBuilder()
-                            .setEmoji("📜")
-                            .setLabel(t("vars.tos", lng))
-                            .setURL(client.config.links.tos)
-                            .setStyle(ButtonStyle.Link),
-                        new ButtonBuilder()
-                            .setEmoji("🔒")
-                            .setLabel(t("vars.privacyPolicy", lng))
-                            .setURL(client.config.links.privacy)
-                            .setStyle(ButtonStyle.Link)
-                    );
-
                 await guild.systemChannel.send({
                     content: t("events.welcome", {
                         ...lng,
@@ -57,8 +38,7 @@ export default class GuildCreate extends Event {
                         enableCommand: `</${configCommandName} ${enableCommandName}:${configCommand.id}>`,
                         deleteCommand: `</${deleteCommandName}:${deleteCommand.id}>`,
                         min: 5
-                    }),
-                    components: [ row ]
+                    })
                 });
             } catch {}; // Probably has no permission
         }

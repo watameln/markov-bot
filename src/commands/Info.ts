@@ -110,7 +110,7 @@ export default class InfoCommand extends Command {
         let softwareInfo = this.t("commands.info.texts.nodeVersion", { ...lng, version: process.version }) + "\n";
         softwareInfo += this.t("commands.info.texts.djsVersion", { ...lng, version: "v" + version }) + "\n";
         softwareInfo += this.t("commands.info.texts.memUsage", { ...lng, mem: `${Math.floor(process.memoryUsage().heapUsed / 1024 ** 2)} mb` }) + "\n";
-        softwareInfo += this.t("commands.info.texts.developer", { ...lng, dev: `${this.client.config.emojis.twitter} [@knownasbot](https://twitter.com/knownasbot)` });
+        softwareInfo += this.t("commands.info.texts.developer", { ...lng, dev: "Bot owner" });
 
         embed.addFields(
             {
@@ -126,11 +126,6 @@ export default class InfoCommand extends Command {
         const cRow = new ActionRowBuilder<ButtonBuilder>()
             .addComponents(
                 new ButtonBuilder()
-                    .setEmoji(this.client.config.emojis.topgg)
-                    .setLabel("Top.gg")
-                    .setURL(this.client.config.links.topgg)
-                    .setStyle(ButtonStyle.Link),
-                new ButtonBuilder()
                     .setCustomId("donate")
                     .setEmoji("🤑")
                     .setLabel(this.t("commands.info.texts.donate", lng))
@@ -139,42 +134,13 @@ export default class InfoCommand extends Command {
                     .setCustomId("faq")
                     .setEmoji("🤔")
                     .setLabel(this.t("commands.info.texts.faq", lng))
-                    .setStyle(ButtonStyle.Secondary),
-                new ButtonBuilder()
-                    .setEmoji("😺")
-                    .setLabel(this.t("commands.info.texts.cutecats", lng))
-                    .setURL("https://youtu.be/dQw4w9WgXcQ")
-                    .setStyle(ButtonStyle.Link)
-            );
-
-        const docsRow = new ActionRowBuilder<ButtonBuilder>()
-            .addComponents(
-                new ButtonBuilder()
-                    .setEmoji("👥")
-                    .setLabel(this.t("vars.support", lng))
-                    .setURL(this.client.config.links.support)
-                    .setStyle(ButtonStyle.Link),
-                new ButtonBuilder()
-                    .setEmoji(this.client.config.emojis.github)
-                    .setLabel("GitHub")
-                    .setURL(this.client.config.links.github)
-                    .setStyle(ButtonStyle.Link),
-                new ButtonBuilder()
-                    .setEmoji("📜")
-                    .setLabel(this.t("vars.tos", lng))
-                    .setURL(this.client.config.links.tos)
-                    .setStyle(ButtonStyle.Link),
-                new ButtonBuilder()
-                    .setEmoji("🔒")
-                    .setLabel(this.t("vars.privacyPolicy", lng))
-                    .setURL(this.client.config.links.privacy)
-                    .setStyle(ButtonStyle.Link)
+                    .setStyle(ButtonStyle.Secondary)
             );
 
         embed.setFooter({
             text: `Shard ${interaction.guild.shardId}`
         });
 
-        return interaction.editReply({ embeds: [ embed ], components: [ cRow, docsRow ] });
+        return interaction.editReply({ embeds: [ embed ], components: [ cRow ] });
     }
 }

@@ -63,17 +63,7 @@ export default class Interaction extends Event {
                 embed = new EmbedBuilder()
                     .setColor(0x34eb71)
                     .setTitle("💸 " + t("commands.donate.title", { ...lng }))
-                    .setDescription(t("commands.donate.description", {
-                        ...lng,
-                        urls: `${client.config.emojis.bmc} **Buy Me A Coffee: [buymeacoffee.com/knownasbot](${client.config.links.bmc})**`,
-                        friendURL: `**${client.config.emojis.twitter} [@LukeFl_](https://twitter.com/lukefl_)**`
-                    }))
-                    .addFields([
-                        {
-                            name: t("commands.donate.cryptoTitle", { ...lng }),
-                            value: `**${client.config.emojis.bitcoin} Bitcoin:** \`${client.config.cryptoAddresses.bitcoin}\`\n**${client.config.emojis.ethereum} Ethereum:** \`${client.config.cryptoAddresses.ethereum}\``
-                        }
-                    ])
+                    .setDescription("Support is not configured for this bot. Contact the bot owner for details.")
                     .setImage(this.pleadingGIFs[Math.floor(Math.random() * this.pleadingGIFs.length)])
                     .setFooter({ text: t("commands.donate.footer", lng) });
             } else if (interaction.customId == "faq") {
@@ -89,8 +79,8 @@ export default class Interaction extends Event {
                     ...lng,
                     returnObjects: true,
 
-                    contact: `**${client.config.emojis.twitter} [@knownasbot](https://twitter.com/knownasbot)**`,
-                    friendURL: "https://twitter.com/lukefl_",
+                    contact: "Contact the bot owner for support.",
+                    friendURL: "",
                     deleteCommand: `</${deleteCommandName}:${deleteCommand.id}>`,
                     trackingCommand: `</${trackingCommandName}:${trackingCommand.id}>`,
                     parameter: t("commands.deleteTexts.command.options.0.name", lng)

@@ -7,27 +7,6 @@ export default interface ClientInterface extends Client {
     config?: {
         admins?: string[];
         devGuilds?: string[];
-        links: {
-            website: string;
-            tos: string;
-            privacy: string;
-            github: string;
-            topgg: string;
-            bmc: string;
-            support: string;
-        };
-        emojis: {
-            twitter: string;
-            github: string;
-            topgg: string;
-            bmc: string;
-            bitcoin:  string;
-            ethereum: string;
-        };
-        cryptoAddresses: {
-            bitcoin: string;
-            ethereum: string;
-        };
     };
     cooldown?: Collection<Snowflake, number>;
     commands?: Collection<string, CommandInterface>;
